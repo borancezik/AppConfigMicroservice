@@ -1,4 +1,5 @@
 using AppConfigMicroservice.DataAccess;
+using AppConfigMicroservice.Features.Config;
 using AppConfigMicroservice.Features.Config.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,6 +16,7 @@ builder.Services.AddDbContext<ApplicationContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+builder.Services.AddMediatR(config => config.RegisterServicesFromAssembly(typeof(Program).Assembly));
 
 var app = builder.Build();
 
@@ -24,6 +26,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+CreateConfig.MapEndpoints(app);
 
 app.UseHttpsRedirection();
 
