@@ -15,35 +15,48 @@ namespace AppConfigMicroservice.Common
             _context = context;
         }
 
-        public TEntity Add(TEntity entity)
+        public async Task<TEntity> AddAsync(TEntity entity)
         {
             _context.Entry(entity).State = EntityState.Added;
             _context.SaveChanges();
             return entity;
         }
 
-        public TEntity Delete(TEntity entity)
+        public async Task Delete(long id)
         {
-            _context.Entry(entity).State = EntityState.Deleted;
-            _context.SaveChanges();
-            return entity;
+            var entity =  await _context.Set<TEntity>().FindAsync(id);
+            if (entity != null)
+            {
+                _context.Set<TEntity>().Remove(entity);
+
+                 _context.SaveChangesAsync();
+            }
         }
 
-        public List<TEntity> GetAll(Expression<Func<TEntity, bool>> filter = null)
+        public async Task<TEntity> GetByIdAsync(long id)
+        {
+            return await _context.Set<TEntity>().FindAsync(id);
+        }
+
+        public async Task<TEntity> GetFirstOrDefaultAsync(Expression<Func<TEntity, bool>> filter)
+        {
+            return await _context.Set<TEntity>().FirstOrDefaultAsync(filter);
+        }
+
+        public async Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> filter)
         {
             return filter == null ? _context.Set<TEntity>().ToList() : _context.Set<TEntity>().Where(filter).ToList();
         }
 
-        public TEntity GetById(int id)
-        {
-            return _context.Set<TEntity>().Find(id);
-        }
-
-        public TEntity Update(TEntity entity)
+        public async Task<TEntity> Update(TEntity entity)
         {
             _context.Entry(entity).State = EntityState.Modified;
-            _context.SaveChanges();
+            _context.SaveChangesAsync();
             return entity;
+        }
+        async Task<List<TEntity>> IRepositoryBase<TEntity>.GetAll(Expression<Func<TEntity, bool>> filter)
+        {
+            return filter == null ? _context.Set<TEntity>().ToList() : _context.Set<TEntity>().Where(filter).ToList();
         }
     }
 }

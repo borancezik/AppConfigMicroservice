@@ -1,30 +1,18 @@
-﻿using AppConfigMicroservice.Features.Config.Data;
-using Microsoft.AspNetCore.Mvc;
+﻿using AppConfigMicroservice.Features.Config.Command;
+using MediatR;
 
 namespace AppConfigMicroservice.Features.Config
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class ConfigsController : ControllerBase
+    public static class ConfigsController
     {
-        private readonly IConfigRepository _configRepository;
-
-        public ConfigsController(IConfigRepository configRepository)
+        public static void MapEndpoints(this IEndpointRouteBuilder app)
         {
-            _configRepository = configRepository;
-        }
-
-        [HttpGet]
-        public IActionResult GetAll()
-        {
-            var result = _configRepository.GetAll();
-
-            if (result == null)
+            app.MapPost("api/articles", async (ConfigCommand command, ISender sender) =>
             {
-                return BadRequest(result);
-            }
+                var configId = await sender.Send(command);
 
-            return Ok(result);
+                return Results.Ok(configId);
+            });
         }
     }
 }
