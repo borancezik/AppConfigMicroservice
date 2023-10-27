@@ -1,5 +1,7 @@
 ﻿using AppConfigMicroservice.Features.Config.Command;
+using AppConfigMicroservice.Features.Config.Query;
 using MediatR;
+using Microsoft.AspNetCore.Mvc;
 
 namespace AppConfigMicroservice.Features.Config
 {
@@ -13,6 +15,14 @@ namespace AppConfigMicroservice.Features.Config
 
                 return Results.Ok(configId);
             });
+
+            app.MapGet("api/articles", async ([FromBody]ConfigQuery query, ISender sender) =>
+            {
+                var response = await sender.Send(query);
+
+                return Results.Ok(response);
+            });
         }
+
     }
 }

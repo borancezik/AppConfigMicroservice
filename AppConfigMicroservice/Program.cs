@@ -27,7 +27,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-CreateConfig.MapEndpoints(app);
+ConfigsController.MapEndpoints(app);
 
 app.UseHttpsRedirection();
 
