@@ -8,7 +8,7 @@ namespace AppConfigMicroservice.Features.Config.Models
     {
         [Column("id")]
         [Key]
-        public int Id { get; set; }
+        public long Id { get; set; }
 
         [Column("application_id")]
         public int? ApplicationId { get; set; }

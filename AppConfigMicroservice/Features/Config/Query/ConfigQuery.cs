@@ -4,6 +4,6 @@ namespace AppConfigMicroservice.Features.Config.Query
 {
     public class ConfigQuery : IRequest<ConfigQueryResponse>
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
     }
 }

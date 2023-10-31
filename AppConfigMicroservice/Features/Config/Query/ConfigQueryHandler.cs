@@ -13,7 +13,7 @@ namespace AppConfigMicroservice.Features.Config.Query
 
         public async Task<ConfigQueryResponse> Handle(ConfigQuery request, CancellationToken cancellationToken)
         {
-            var response = _configRepository.GetByIdAsync(request.Id).GetAwaiter().GetResult();
+            var response = await _configRepository.GetByIdAsync(request.Id);
 
             return new ConfigQueryResponse() 
             { 

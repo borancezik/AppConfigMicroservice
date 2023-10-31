@@ -4,7 +4,7 @@ namespace AppConfigMicroservice.Features.Config.Query
 {
     public class ConfigQueryResponse
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public int? ApplicationId { get; set; }
         public int? EnvType { get; set; }
         public int? ConfigType { get; set; }
