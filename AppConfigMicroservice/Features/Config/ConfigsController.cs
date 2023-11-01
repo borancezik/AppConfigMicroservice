@@ -9,16 +9,16 @@ namespace AppConfigMicroservice.Features.Config
     {
         public static void MapEndpoints(this IEndpointRouteBuilder app)
         {
-            app.MapPost("api/articles", async ([FromBody]ConfigCommand command, ISender sender) =>
+            app.MapPost("api/configs", async ([FromBody]ConfigCommand command, ISender sender) =>
             {
                 var configId = await sender.Send(command);
 
                 return Results.Ok(configId);
             });
 
-            app.MapGet("api/articles", async ([FromQuery]int id, ISender sender) =>
+            app.MapGet("api/configs", async ([FromQuery]int id, ISender sender) =>
             {
-                ConfigQuery query= new ConfigQuery() { Id = id };
+                ConfigQuery query = new ConfigQuery() { Id = id };
                 var response = await sender.Send(query);
 
                 return Results.Ok(response);

@@ -1,4 +1,4 @@
-﻿using AppConfigMicroservice.Common;
+﻿using AppConfigMicroservice.Common.Repository;
 using AppConfigMicroservice.Features.Config.Models;
 
 namespace AppConfigMicroservice.Features.Config.Data

@@ -1,18 +1,21 @@
-﻿using AppConfigMicroservice.DataAccess;
+﻿using AppConfigMicroservice.Common.Services.CacheService;
+using AppConfigMicroservice.DataAccess;
 using AppConfigMicroservice.Domain;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-namespace AppConfigMicroservice.Common
+namespace AppConfigMicroservice.Common.Repository
 {
     public class RepositoryBase<TEntity, TContext> : IRepositoryBase<TEntity>
         where TEntity : class, IEntity, new()
         where TContext : ApplicationContext
     {
         private readonly TContext _context;
-        public RepositoryBase(TContext context)
+        private readonly ICacheService _cacheService;
+        public RepositoryBase(TContext context, ICacheService cacheService)
         {
             _context = context;
+            _cacheService = cacheService;
         }
 
         public async Task<TEntity> AddAsync(TEntity entity)
@@ -24,18 +27,31 @@ namespace AppConfigMicroservice.Common
 
         public async Task Delete(long id)
         {
-            var entity =  await _context.Set<TEntity>().FindAsync(id);
+            var entity = await _context.Set<TEntity>().FindAsync(id);
             if (entity != null)
             {
                 _context.Set<TEntity>().Remove(entity);
 
-                 _context.SaveChangesAsync();
+                _context.SaveChangesAsync();
             }
         }
 
         public async Task<TEntity> GetByIdAsync(long id)
         {
-            return await _context.Set<TEntity>().FindAsync(id);
+            string cacheKey = $"{typeof(TEntity).Name}-{id}";
+            var entity = _cacheService.CheckCachedData<TEntity>(cacheKey);
+
+            if (entity is null)
+            {
+                entity = await _context.Set<TEntity>().FindAsync(id);
+
+                if (entity is not null)
+                {
+                    _cacheService.CheckAndAddToCache(cacheKey, entity);
+                }
+            }
+
+            return entity;
         }
 
         public async Task<TEntity> GetFirstOrDefaultAsync(Expression<Func<TEntity, bool>> filter)

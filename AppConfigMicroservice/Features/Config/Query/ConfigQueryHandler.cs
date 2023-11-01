@@ -1,4 +1,5 @@
-﻿using AppConfigMicroservice.Features.Config.Data;
+﻿using AppConfigMicroservice.Common.Services.CacheService;
+using AppConfigMicroservice.Features.Config.Data;
 using MediatR;
 
 namespace AppConfigMicroservice.Features.Config.Query

@@ -1,3 +1,4 @@
+using AppConfigMicroservice.Common.Services.CacheService;
 using AppConfigMicroservice.DataAccess;
 using AppConfigMicroservice.Features.Config;
 using AppConfigMicroservice.Features.Config.Data;
@@ -12,11 +13,13 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IConfigRepository, ConfigRepository>();
+builder.Services.AddScoped<ICacheService, CacheService>();
 builder.Services.AddDbContext<ApplicationContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 builder.Services.AddMediatR(config => config.RegisterServicesFromAssembly(typeof(Program).Assembly));
+builder.Services.AddMemoryCache();
 
 var app = builder.Build();
 

@@ -1,7 +1,7 @@
 ﻿using AppConfigMicroservice.Domain;
 using System.Linq.Expressions;
 
-namespace AppConfigMicroservice.Common
+namespace AppConfigMicroservice.Common.Repository
 {
     public interface IRepositoryBase<T> where T : class, IEntity, new()
     {
