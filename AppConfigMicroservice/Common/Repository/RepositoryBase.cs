@@ -11,68 +11,51 @@ namespace AppConfigMicroservice.Common.Repository
         where TContext : ApplicationContext
     {
         private readonly TContext _context;
-        private readonly ICacheService _cacheService;
-        public RepositoryBase(TContext context, ICacheService cacheService)
+        private readonly DbSet<TEntity> _dbSet;
+        public RepositoryBase(TContext context)
         {
             _context = context;
-            _cacheService = cacheService;
+            _dbSet = context.Set<TEntity>();
         }
 
-        public async Task<TEntity> AddAsync(TEntity entity)
+        public virtual async Task<TEntity> AddAsync(TEntity entity)
         {
-            _context.Entry(entity).State = EntityState.Added;
-            _context.SaveChanges();
+            await _dbSet.AddAsync(entity);
+            await _context.SaveChangesAsync();
             return entity;
         }
 
-        public async Task Delete(long id)
+        public virtual async Task Delete(long id)
         {
-            var entity = await _context.Set<TEntity>().FindAsync(id);
+            var entity = await _dbSet.FindAsync(id);
             if (entity != null)
             {
-                _context.Set<TEntity>().Remove(entity);
+                _dbSet.Remove(entity);
 
                 _context.SaveChangesAsync();
             }
         }
 
-        public async Task<TEntity> GetByIdAsync(long id)
+        public virtual async Task<TEntity> GetByIdAsync(long id)
         {
-            string cacheKey = $"{typeof(TEntity).Name}-{id}";
-            var entity = _cacheService.CheckCachedData<TEntity>(cacheKey);
+            return await _dbSet.FindAsync(id);
+        }
 
-            if (entity is null)
-            {
-                entity = await _context.Set<TEntity>().FindAsync(id);
+        public virtual async Task<TEntity> GetFirstOrDefaultAsync(Expression<Func<TEntity, bool>> filter)
+        {
+            return await _dbSet.FirstOrDefaultAsync(filter);
+        }
 
-                if (entity is not null)
-                {
-                    _cacheService.CheckAndAddToCache(cacheKey, entity);
-                }
-            }
+        public virtual async Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> filter)
+        {
+            return filter == null ? await _dbSet.ToListAsync() : await _dbSet.Where(filter).ToListAsync();
+        }
 
+        public virtual async Task<TEntity> Update(TEntity entity)
+        {
+            _dbSet.Update(entity);
+            await _context.SaveChangesAsync();
             return entity;
-        }
-
-        public async Task<TEntity> GetFirstOrDefaultAsync(Expression<Func<TEntity, bool>> filter)
-        {
-            return await _context.Set<TEntity>().FirstOrDefaultAsync(filter);
-        }
-
-        public async Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> filter)
-        {
-            return filter == null ? _context.Set<TEntity>().ToList() : _context.Set<TEntity>().Where(filter).ToList();
-        }
-
-        public async Task<TEntity> Update(TEntity entity)
-        {
-            _context.Entry(entity).State = EntityState.Modified;
-            _context.SaveChangesAsync();
-            return entity;
-        }
-        async Task<List<TEntity>> IRepositoryBase<TEntity>.GetAll(Expression<Func<TEntity, bool>> filter)
-        {
-            return filter == null ? _context.Set<TEntity>().ToList() : _context.Set<TEntity>().Where(filter).ToList();
         }
     }
 }

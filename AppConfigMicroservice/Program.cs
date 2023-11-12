@@ -1,7 +1,12 @@
+using AppConfigMicroservice.Common.Behaviors;
 using AppConfigMicroservice.Common.Services.CacheService;
 using AppConfigMicroservice.DataAccess;
 using AppConfigMicroservice.Features.Config;
+using AppConfigMicroservice.Features.Config.Command;
 using AppConfigMicroservice.Features.Config.Data;
+using AppConfigMicroservice.Features.Config.Query;
+using FluentValidation;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +19,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IConfigRepository, ConfigRepository>();
 builder.Services.AddScoped<ICacheService, CacheService>();
+builder.Services.AddScoped(typeof(IPipelineBehavior<,>),typeof(ValidationBehavior<,>));
+builder.Services.AddTransient<IValidator<ConfigQuery>, ConfigQueryValidator>();
+builder.Services.AddTransient<IValidator<ConfigCommand>, ConfigCommandValidator>();
 builder.Services.AddDbContext<ApplicationContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));

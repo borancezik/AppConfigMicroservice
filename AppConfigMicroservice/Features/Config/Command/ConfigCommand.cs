@@ -1,8 +1,9 @@
-﻿using MediatR;
+﻿using ErrorOr;
+using MediatR;
 
 namespace AppConfigMicroservice.Features.Config.Command
 {
-    public class ConfigCommand : IRequest<int>
+    public class ConfigCommand : IRequest<ErrorOr<int>>
     {
         public int? ApplicationId { get; set; }
         public int? EnvType { get; set; }

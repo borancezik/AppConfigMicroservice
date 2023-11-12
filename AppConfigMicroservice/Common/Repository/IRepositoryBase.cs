@@ -6,7 +6,6 @@ namespace AppConfigMicroservice.Common.Repository
     public interface IRepositoryBase<T> where T : class, IEntity, new()
     {
         Task<T> GetByIdAsync(long id);
-        Task<List<T>> GetAll(Expression<Func<T, bool>> filter = null);
         Task<T> AddAsync(T entity);
         Task Delete(long id);
         Task<T> Update(T entity);
