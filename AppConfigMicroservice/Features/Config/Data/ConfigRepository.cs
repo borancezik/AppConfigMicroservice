@@ -16,23 +16,5 @@ namespace AppConfigMicroservice.Features.Config.Data
             _context = context;
             _cacheService = cacheService;
         }
-        
-        public override async Task<ConfigEntity> GetByIdAsync(long id)
-        {
-            string cacheKey = $"{typeof(ConfigEntity).Name}-{id}";
-            var entity = _cacheService.CheckCachedData<ConfigEntity>(cacheKey);
-
-            if (entity is null)
-            {
-                entity = await base.GetByIdAsync(id);
-
-                if (entity is not null)
-                {
-                    _cacheService.CheckAndAddToCache(cacheKey, entity);
-                }
-            }
-            return entity;
-        }
-
     }
 }

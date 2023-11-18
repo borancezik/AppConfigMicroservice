@@ -32,7 +32,7 @@ namespace AppConfigMicroservice.Common.Repository
             {
                 _dbSet.Remove(entity);
 
-                _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
             }
         }
 

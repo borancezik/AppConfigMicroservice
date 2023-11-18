@@ -10,20 +10,20 @@ namespace AppConfigMicroservice.Common.Services.CacheService
             _cache = cache;
         }
 
-        public void CheckAndAddToCache<T>(string cacheKey, T data)
+        public async Task AddAsync<T>(string cacheKey, T data, int cachingTime = 20)
         {
-            var cacheEntryOptions = new MemoryCacheEntryOptions();
-            _cache.Set(cacheKey, data, cacheEntryOptions);
+            var cacheEntryOptions = new MemoryCacheEntryOptions() { AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(cachingTime) };
+            await Task.Run(() => _cache.Set(cacheKey, data, cacheEntryOptions));
         }
 
-        public void RemoveCachedData(string cacheKey)
+        public async Task DeleteAsync(string cacheKey)
         {
-            _cache.Remove(cacheKey);
+            await Task.Run(() => _cache.Remove(cacheKey));
         }
 
-        public T CheckCachedData<T>(string cacheKey)
+        public async Task<T> GetAsync<T>(string cacheKey)
         {
-            var cachedData = _cache.Get(cacheKey);
+            var cachedData = await Task.Run(() => _cache.Get(cacheKey));
             return (T)cachedData;
         }
     }
