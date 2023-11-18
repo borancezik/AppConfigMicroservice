@@ -1,4 +1,5 @@
-﻿using AppConfigMicroservice.Features.Config.Data;
+﻿using AppConfigMicroservice.Domain;
+using AppConfigMicroservice.Features.Config.Data;
 using AppConfigMicroservice.Features.Config.Models;
 using AppConfigMicroservice.Features.Config.Query;
 using AppConfigMicroservice.Features.Config.Services;
@@ -8,7 +9,7 @@ using MediatR;
 
 namespace AppConfigMicroservice.Features.Config.Command
 {
-    internal sealed class ConfigCommandHandler : IRequestHandler<ConfigCommand, ErrorOr<int>>
+    internal sealed class ConfigCommandHandler : IRequestHandler<ConfigCommand, ApiResponse<ConfigEntity>>
     {
         private readonly IConfigService _configService;
         private readonly IValidator<ConfigCommand> _validator;
@@ -17,13 +18,13 @@ namespace AppConfigMicroservice.Features.Config.Command
             _configService = configService;
             _validator = validator;
         }
-        public async Task<ErrorOr<int>> Handle(ConfigCommand request, CancellationToken cancellationToken)
+        public async Task<ApiResponse<ConfigEntity>> Handle(ConfigCommand request, CancellationToken cancellationToken)
         {
             var config = new ConfigEntity { ApplicationId = request.ApplicationId, EnvType = request.EnvType, Config = request.Config, ConfigType = request.ConfigType };
 
-            var result = _configService.AddAsync(config);
+            var result = await _configService.AddAsync(config);
 
-            return result.Id;
+            return result;
         }
     }
 }

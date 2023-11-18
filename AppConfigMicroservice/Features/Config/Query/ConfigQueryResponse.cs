@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using AppConfigMicroservice.Domain;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AppConfigMicroservice.Features.Config.Query
 {

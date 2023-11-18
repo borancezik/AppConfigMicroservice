@@ -2,16 +2,31 @@
 
 namespace AppConfigMicroservice.Domain
 {
-    public class ApiResponse
+    public class ApiResponse<T>
     {
-        public TResponse Data { get; set; }
+        public T? Data { get; set; }
         public bool IsSuccess { get; set; } = false;
+        public string? Message { get; set; }
 
-        public string? ErrorCode { get; set; }
+        public static ApiResponse<T> SuccessResult(T data, string message = "")
+        {
+            return new ApiResponse<T>
+            {
+                IsSuccess = true,
+                Message = message,
+                Data = data
+            };
+        }
 
-        public List<string>? ErrorMessageList { get; set; }
-
-        public string? ErrorMessage { get; set; }
+        public static ApiResponse<T> FailureResult(string message)
+        {
+            return new ApiResponse<T>
+            {
+                IsSuccess = false,
+                Message = message,
+                Data = default(T)
+            };
+        }
 
     }
 }

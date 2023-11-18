@@ -1,4 +1,5 @@
-﻿using ErrorOr;
+﻿using AppConfigMicroservice.Domain;
+using ErrorOr;
 using FluentValidation;
 using MediatR;
 using Microsoft.IdentityModel.Tokens;
@@ -6,9 +7,9 @@ using Microsoft.IdentityModel.Tokens;
 namespace AppConfigMicroservice.Common.Behaviors
 {
     public class ValidationBehavior<TRequest, TResponse> : 
-        IPipelineBehavior<TRequest, TResponse> 
-        where TRequest : IRequest<TResponse> 
-        where TResponse : IErrorOr
+        IPipelineBehavior<TRequest, ApiResponse<TResponse>> 
+        where TRequest : IRequest<ApiResponse<TResponse>> 
+        where TResponse : class
     {
         private readonly IValidator<TRequest>? _validator;
 
@@ -17,7 +18,7 @@ namespace AppConfigMicroservice.Common.Behaviors
             _validator= validator;
         }
 
-        public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
+        public async Task<ApiResponse<TResponse>> Handle(TRequest request, RequestHandlerDelegate<ApiResponse<TResponse>> next, CancellationToken cancellationToken)
         {
             if (_validator is null)
             {
@@ -36,7 +37,7 @@ namespace AppConfigMicroservice.Common.Behaviors
                     validationFailure.PropertyName,
                     validationFailure.ErrorMessage));
 
-            return (dynamic)errors;
+            return ApiResponse<TResponse>.FailureResult(errors.First().Description);
         }
     }
 }

@@ -5,11 +5,11 @@ namespace AppConfigMicroservice.Common.Repository
 {
     public interface IRepositoryBase<T> where T : class, IEntity, new()
     {
-        Task<T> GetByIdAsync(long id);
-        Task<T> AddAsync(T entity);
-        Task Delete(long id);
-        Task<T> Update(T entity);
-        Task<T> GetFirstOrDefaultAsync(Expression<Func<T, bool>> filter);
-        Task<List<T>> GetListAsync(Expression<Func<T, bool>> filter);
+        Task<ApiResponse<T>> GetByIdAsync(long id);
+        Task<ApiResponse<T>> AddAsync(T entity);
+        //Task<ApiResponse<T>> Delete(long id);
+        Task<ApiResponse<T>> Update(T entity);
+        Task<ApiResponse<T>> GetFirstOrDefaultAsync(Expression<Func<T, bool>> filter);
+        //Task<List<T>> GetListAsync(Expression<Func<T, bool>> filter);
     }
 }

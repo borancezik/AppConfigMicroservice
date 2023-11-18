@@ -1,5 +1,4 @@
-﻿using AppConfigMicroservice.Common.Services.CacheService;
-using AppConfigMicroservice.DataAccess;
+﻿using AppConfigMicroservice.DataAccess;
 using AppConfigMicroservice.Domain;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
@@ -18,44 +17,90 @@ namespace AppConfigMicroservice.Common.Repository
             _dbSet = context.Set<TEntity>();
         }
 
-        public virtual async Task<TEntity> AddAsync(TEntity entity)
+        public virtual async Task<ApiResponse<TEntity>> AddAsync(TEntity entity)
         {
-            await _dbSet.AddAsync(entity);
-            await _context.SaveChangesAsync();
-            return entity;
+            try
+            {
+                await _dbSet.AddAsync(entity);
+                await _context.SaveChangesAsync();
+                return ApiResponse<TEntity>.SuccessResult(entity);
+            }
+            catch (Exception ex)
+            {
+                return ApiResponse<TEntity>.FailureResult(ex.Message);
+            }
+            
         }
 
-        public virtual async Task Delete(long id)
-        {
-            var entity = await _dbSet.FindAsync(id);
-            if (entity != null)
-            {
-                _dbSet.Remove(entity);
+        //public virtual async Task<ApiResponse<TEntity>> Delete(long id)
+        //{
+        //    var entity = await _dbSet.FindAsync(id);
+        //    if (entity != null)
+        //    {
+        //        entity.
+        //        _dbSet.Update(entity);
+        //        await _context.SaveChangesAsync();
+        //        return entity;
+        //    }
+        //}
 
-                await _context.SaveChangesAsync();
+        public virtual async Task<ApiResponse<TEntity>> GetByIdAsync(long id)
+        {
+            try
+            {
+                var entity = await _dbSet.FindAsync(id);
+                if (entity is not null)
+                {
+                    return ApiResponse<TEntity>.SuccessResult(entity);
+                }
+                else
+                {
+                    return ApiResponse<TEntity>.FailureResult("Değer bulunamadı");
+                }
+            }
+            catch (Exception ex)
+            {
+                return ApiResponse<TEntity>.FailureResult(ex.Message);
             }
         }
 
-        public virtual async Task<TEntity> GetByIdAsync(long id)
+        public virtual async Task<ApiResponse<TEntity>> GetFirstOrDefaultAsync(Expression<Func<TEntity, bool>> filter)
         {
-            return await _dbSet.FindAsync(id);
+            try
+            {
+                var entity = await _dbSet.FirstOrDefaultAsync(filter);
+                if (entity is not null)
+                {
+                    return ApiResponse<TEntity>.SuccessResult(entity);
+                }
+                else
+                {
+                    return ApiResponse<TEntity>.FailureResult("Değer bulunamadı");
+                }
+            }
+            catch (Exception ex)
+            {
+                return ApiResponse<TEntity>.FailureResult(ex.Message);
+            }
         }
 
-        public virtual async Task<TEntity> GetFirstOrDefaultAsync(Expression<Func<TEntity, bool>> filter)
-        {
-            return await _dbSet.FirstOrDefaultAsync(filter);
-        }
+        //public virtual async Task<ApiResponse<List<TEntity>>> GetListAsync(Expression<Func<TEntity, bool>> filter)
+        //{
+        //    return filter == null ? await _dbSet.ToListAsync() : await _dbSet.Where(filter).ToListAsync();
+        //}
 
-        public virtual async Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> filter)
+        public virtual async Task<ApiResponse<TEntity>> Update(TEntity entity)
         {
-            return filter == null ? await _dbSet.ToListAsync() : await _dbSet.Where(filter).ToListAsync();
-        }
-
-        public virtual async Task<TEntity> Update(TEntity entity)
-        {
-            _dbSet.Update(entity);
-            await _context.SaveChangesAsync();
-            return entity;
+            try
+            {
+                _dbSet.Update(entity);
+                await _context.SaveChangesAsync();
+                return ApiResponse<TEntity>.SuccessResult(entity);
+            }
+            catch (Exception ex)
+            {
+                return ApiResponse<TEntity>.FailureResult(ex.Message);
+            }
         }
     }
 }

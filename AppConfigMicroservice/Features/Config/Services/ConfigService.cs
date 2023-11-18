@@ -1,4 +1,5 @@
 ﻿using AppConfigMicroservice.Common.Services.CacheService;
+using AppConfigMicroservice.Domain;
 using AppConfigMicroservice.Features.Config.Data;
 using AppConfigMicroservice.Features.Config.Models;
 
@@ -14,26 +15,31 @@ namespace AppConfigMicroservice.Features.Config.Services
             _cacheService = cacheService;
         }
 
-        public Task<ConfigEntity> AddAsync(ConfigEntity config)
+        public Task<ApiResponse<ConfigEntity>> AddAsync(ConfigEntity config)
         {
             return _configRepository.AddAsync(config);  
         }
 
-        public async Task<ConfigEntity> GetByIdAsync(long id)
+        public async Task<ApiResponse<ConfigEntity>> GetByIdAsync(long id)
         {
             string cacheKey = $"{typeof(ConfigEntity).Name}-{id}";
-            var config = await _cacheService.GetAsync<ConfigEntity>(cacheKey);
+            var configCache = await _cacheService.GetAsync<ConfigEntity>(cacheKey);
 
-            if (config is null)
+            if (configCache is null)
             {
-                config = await _configRepository.GetByIdAsync(id);
+                var configEntity = await _configRepository.GetByIdAsync(id);
 
-                if (config is not null)
+                if (configEntity is not null)
                 {
-                    await _cacheService.AddAsync(cacheKey, config);
+                    await _cacheService.AddAsync(cacheKey, configEntity);
                 }
+
+                return configEntity;
             }
-            return config;
+            else
+            {
+                return ApiResponse<ConfigEntity>.SuccessResult(configCache);
+            }
         }
     }
 }

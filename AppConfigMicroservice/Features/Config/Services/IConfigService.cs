@@ -1,10 +1,11 @@
-﻿using AppConfigMicroservice.Features.Config.Models;
+﻿using AppConfigMicroservice.Domain;
+using AppConfigMicroservice.Features.Config.Models;
 
 namespace AppConfigMicroservice.Features.Config.Services
 {
     public interface IConfigService
     {
-        Task<ConfigEntity> GetByIdAsync(long id);
-        Task<ConfigEntity> AddAsync(ConfigEntity entity);
+        Task<ApiResponse<ConfigEntity>> GetByIdAsync(long id);
+        Task<ApiResponse<ConfigEntity>> AddAsync(ConfigEntity entity);
     }
 }
