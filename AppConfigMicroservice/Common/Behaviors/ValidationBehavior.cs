@@ -1,4 +1,4 @@
-﻿using AppConfigMicroservice.Domain;
+﻿using AppConfigMicroservice.Common.Models;
 using ErrorOr;
 using FluentValidation;
 using MediatR;

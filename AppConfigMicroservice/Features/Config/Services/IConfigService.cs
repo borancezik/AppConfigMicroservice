@@ -1,4 +1,4 @@
-﻿using AppConfigMicroservice.Domain;
+﻿using AppConfigMicroservice.Common.Models;
 using AppConfigMicroservice.Features.Config.Models;
 
 namespace AppConfigMicroservice.Features.Config.Services

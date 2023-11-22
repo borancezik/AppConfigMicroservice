@@ -1,7 +1,7 @@
 ﻿using AppConfigMicroservice.Common.Repository;
-using AppConfigMicroservice.Common.Services.CacheService;
+using AppConfigMicroservice.Common.Services.CacheService.Abstract;
 using AppConfigMicroservice.DataAccess;
-using AppConfigMicroservice.Domain;
+using AppConfigMicroservice.Common.Models.Entities;
 using AppConfigMicroservice.Features.Config.Models;
 
 namespace AppConfigMicroservice.Features.Config.Data

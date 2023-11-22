@@ -1,6 +1,7 @@
-using AppConfigMicroservice.Common;
 using AppConfigMicroservice.Common.Behaviors;
-using AppConfigMicroservice.Common.Services.CacheService;
+using AppConfigMicroservice.Common.Models.Utils;
+using AppConfigMicroservice.Common.Services.CacheService.Abstract;
+using AppConfigMicroservice.Common.Services.CacheService.Concrete;
 using AppConfigMicroservice.DataAccess;
 using AppConfigMicroservice.Features.Config;
 using AppConfigMicroservice.Features.Config.Command;
@@ -10,7 +11,6 @@ using AppConfigMicroservice.Features.Config.Services;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +24,10 @@ builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSet
 builder.Services.AddScoped<IConfigRepository, ConfigRepository>();
 builder.Services.AddScoped<IConfigService, ConfigService>();
 builder.Services.AddScoped<ICacheService, CacheService>();
+builder.Services.AddScoped<ICacheMethod, MemoryCacheMethod>();
+builder.Services.AddScoped<ICacheMethod, DistributedCacheMethod>();
+builder.Services.AddScoped<MemoryCacheMethod>();
+builder.Services.AddScoped<DistributedCacheMethod>();
 builder.Services.AddScoped(typeof(IPipelineBehavior<,>),typeof(ValidationBehavior<,>));
 builder.Services.AddTransient<IValidator<ConfigQuery>, ConfigQueryValidator>();
 builder.Services.AddTransient<IValidator<ConfigCommand>, ConfigCommandValidator>();

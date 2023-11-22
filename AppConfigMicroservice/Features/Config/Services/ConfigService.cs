@@ -1,5 +1,5 @@
-﻿using AppConfigMicroservice.Common.Services.CacheService;
-using AppConfigMicroservice.Domain;
+﻿using AppConfigMicroservice.Common.Models;
+using AppConfigMicroservice.Common.Services.CacheService.Abstract;
 using AppConfigMicroservice.Features.Config.Data;
 using AppConfigMicroservice.Features.Config.Models;
 

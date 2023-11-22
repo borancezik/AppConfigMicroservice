@@ -1,6 +1,6 @@
-﻿using AppConfigMicroservice.Domain;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using AppConfigMicroservice.Common.Models.Entities;
 
 namespace AppConfigMicroservice.Features.Config.Models
 {

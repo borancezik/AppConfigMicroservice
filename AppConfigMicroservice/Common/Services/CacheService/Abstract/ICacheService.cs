@@ -1,4 +1,4 @@
-﻿namespace AppConfigMicroservice.Common.Services.CacheService
+﻿namespace AppConfigMicroservice.Common.Services.CacheService.Abstract
 {
     public interface ICacheService
     {

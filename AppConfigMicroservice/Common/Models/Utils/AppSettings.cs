@@ -1,4 +1,4 @@
-﻿namespace AppConfigMicroservice.Common
+﻿namespace AppConfigMicroservice.Common.Models.Utils
 {
     public class AppSettings
     {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace AppConfigMicroservice.Domain
+namespace AppConfigMicroservice.Common.Models
 {
     public class ApiResponse<T>
     {
@@ -24,7 +24,7 @@ namespace AppConfigMicroservice.Domain
             {
                 IsSuccess = false,
                 Message = message,
-                Data = default(T)
+                Data = default
             };
         }
 

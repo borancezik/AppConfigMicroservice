@@ -1,5 +1,6 @@
-﻿using AppConfigMicroservice.DataAccess;
-using AppConfigMicroservice.Domain;
+﻿using AppConfigMicroservice.Common.Models;
+using AppConfigMicroservice.Common.Models.Entities;
+using AppConfigMicroservice.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 

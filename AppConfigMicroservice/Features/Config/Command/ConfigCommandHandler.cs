@@ -1,4 +1,4 @@
-﻿using AppConfigMicroservice.Domain;
+﻿using AppConfigMicroservice.Common.Models;
 using AppConfigMicroservice.Features.Config.Data;
 using AppConfigMicroservice.Features.Config.Models;
 using AppConfigMicroservice.Features.Config.Query;

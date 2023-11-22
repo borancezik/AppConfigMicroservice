@@ -1,4 +1,5 @@
-﻿using AppConfigMicroservice.Domain;
+﻿using AppConfigMicroservice.Common.Models;
+using AppConfigMicroservice.Common.Models.Entities;
 using System.Linq.Expressions;
 
 namespace AppConfigMicroservice.Common.Repository
