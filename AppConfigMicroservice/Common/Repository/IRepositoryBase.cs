@@ -1,5 +1,6 @@
 ﻿using AppConfigMicroservice.Common.Models;
 using AppConfigMicroservice.Common.Models.Entities;
+using AppConfigMicroservice.Common.Specifications.Abstract;
 using System.Linq.Expressions;
 
 namespace AppConfigMicroservice.Common.Repository
@@ -11,6 +12,6 @@ namespace AppConfigMicroservice.Common.Repository
         //Task<ApiResponse<T>> Delete(long id);
         Task<ApiResponse<T>> Update(T entity);
         Task<ApiResponse<T>> GetFirstOrDefaultAsync(Expression<Func<T, bool>> filter);
-        //Task<List<T>> GetListAsync(Expression<Func<T, bool>> filter);
+        Task<List<T>> GetAll(ISpecification<T> specification);
     }
 }

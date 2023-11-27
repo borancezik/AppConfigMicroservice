@@ -3,6 +3,7 @@ using AppConfigMicroservice.Common.Services.CacheService.Abstract;
 using AppConfigMicroservice.DataAccess;
 using AppConfigMicroservice.Common.Models.Entities;
 using AppConfigMicroservice.Features.Config.Models;
+using AppConfigMicroservice.Common.Specifications.Abstract;
 
 namespace AppConfigMicroservice.Features.Config.Data
 {

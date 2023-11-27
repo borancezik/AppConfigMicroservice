@@ -1,7 +1,9 @@
 ﻿using AppConfigMicroservice.Common.Models;
 using AppConfigMicroservice.Common.Models.Entities;
+using AppConfigMicroservice.Common.Specifications.Abstract;
 using AppConfigMicroservice.DataAccess;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace AppConfigMicroservice.Common.Repository
@@ -30,7 +32,7 @@ namespace AppConfigMicroservice.Common.Repository
             {
                 return ApiResponse<TEntity>.FailureResult(ex.Message);
             }
-            
+
         }
 
         //public virtual async Task<ApiResponse<TEntity>> Delete(long id)
@@ -85,10 +87,11 @@ namespace AppConfigMicroservice.Common.Repository
             }
         }
 
-        //public virtual async Task<ApiResponse<List<TEntity>>> GetListAsync(Expression<Func<TEntity, bool>> filter)
-        //{
-        //    return filter == null ? await _dbSet.ToListAsync() : await _dbSet.Where(filter).ToListAsync();
-        //}
+        public virtual async Task<List<TEntity>> GetAll(ISpecification<TEntity> specification)
+        {
+            List<TEntity> entities = _dbSet.Where(specification.IsSatisfiedBy).ToList();
+            return await Task.FromResult(entities);
+        }
 
         public virtual async Task<ApiResponse<TEntity>> Update(TEntity entity)
         {
