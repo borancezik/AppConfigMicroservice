@@ -1,5 +1,7 @@
 ﻿using AppConfigMicroservice.Common.Models;
+using AppConfigMicroservice.Common.Models.Utils;
 using AppConfigMicroservice.Common.Services.CacheService.Abstract;
+using AppConfigMicroservice.Common.Specifications;
 using AppConfigMicroservice.Features.Config.Data;
 using AppConfigMicroservice.Features.Config.Models;
 
@@ -15,9 +17,36 @@ namespace AppConfigMicroservice.Features.Config.Services
             _cacheService = cacheService;
         }
 
-        public Task<ApiResponse<ConfigEntity>> AddAsync(ConfigEntity config)
+        public async Task<ApiResponse<ConfigEntity>> AddAsync(ConfigEntity config)
         {
-            return _configRepository.AddAsync(config);  
+            var entity = await _configRepository.AddAsync(config);
+            if (entity is not null)
+            {
+                return ApiResponse<ConfigEntity>.SuccessResult(entity);
+            }
+            else
+            {
+                return ApiResponse<ConfigEntity>.FailureResult(Constants.NotUpdated);
+            }
+
+        }
+
+        public async Task<List<ConfigEntity>> GetAll(int pageNumber, int pageSize)
+        {
+            return await _configRepository.GetAll(pageNumber, pageSize);
+        }
+
+        public async Task<ApiResponse<ConfigEntity>> GetByFilter(Specification<ConfigEntity> specification)
+        {
+            var result = await _configRepository.GetByFilter(specification);
+            if (result is not null)
+            {
+                return ApiResponse<ConfigEntity>.SuccessResult(result);
+            }
+            else
+            {
+                return ApiResponse<ConfigEntity>.FailureResult(Constants.NotFound);
+            }
         }
 
         public async Task<ApiResponse<ConfigEntity>> GetByIdAsync(long id)
@@ -25,21 +54,17 @@ namespace AppConfigMicroservice.Features.Config.Services
             string cacheKey = $"{typeof(ConfigEntity).Name}-{id}";
             var configCache = await _cacheService.GetAsync<ConfigEntity>(cacheKey);
 
-            if (configCache is null)
-            {
-                var configEntity = await _configRepository.GetByIdAsync(id);
-
-                if (configEntity is not null)
-                {
-                    await _cacheService.AddAsync(cacheKey, configEntity);
-                }
-
-                return configEntity;
-            }
-            else
-            {
+            if (configCache is not null)
                 return ApiResponse<ConfigEntity>.SuccessResult(configCache);
+
+            var configEntity = await _configRepository.GetByIdAsync(id);
+            if (configEntity is not null)
+            {
+                await _cacheService.AddAsync(cacheKey, configEntity);
+                return ApiResponse<ConfigEntity>.SuccessResult(configEntity);
             }
+
+            return ApiResponse<ConfigEntity>.FailureResult(Constants.NotFound);
         }
     }
 }

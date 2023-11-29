@@ -3,7 +3,7 @@ using AppConfigMicroservice.Features.Config.Models;
 using ErrorOr;
 using MediatR;
 
-namespace AppConfigMicroservice.Features.Config.Query
+namespace AppConfigMicroservice.Features.Config.Query.GetById
 {
     public record ConfigQuery : IRequest<ApiResponse<ConfigEntity>>
     {

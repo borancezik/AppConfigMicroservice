@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace AppConfigMicroservice.Features.Config.Query
+namespace AppConfigMicroservice.Features.Config.Query.GetById
 {
     public class ConfigQueryValidator : AbstractValidator<ConfigQuery>
     {

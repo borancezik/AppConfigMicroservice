@@ -1,5 +1,7 @@
 ﻿using AppConfigMicroservice.Features.Config.Command;
-using AppConfigMicroservice.Features.Config.Query;
+using AppConfigMicroservice.Features.Config.Query.GetAll;
+using AppConfigMicroservice.Features.Config.Query.GetById;
+using AppConfigMicroservice.Features.Config.Query.GetProductionType;
 using Azure;
 using ErrorOr;
 using MediatR;
@@ -19,6 +21,18 @@ namespace AppConfigMicroservice.Features.Config
             app.MapGet("api/configs", async ([FromQuery] int id, ISender sender) =>
             {
                 ConfigQuery query = new ConfigQuery() { Id = id };
+                return await sender.Send(query);
+            });
+
+            app.MapGet("api/configs/getall", async ([FromQuery] int pageNumber, [FromQuery] int pageSize, ISender sender) =>
+            {
+                ConfigGetAllQuery query = new ConfigGetAllQuery() { Page = pageNumber,Size = pageSize };
+                return await sender.Send(query);
+            });
+
+            app.MapGet("api/configs/getbyfilter", async ([FromQuery] int applicationId, ISender sender) =>
+            {
+                GetProductionTypeQuery query = new GetProductionTypeQuery() { ApplicationId = applicationId };
                 return await sender.Send(query);
             });
         }

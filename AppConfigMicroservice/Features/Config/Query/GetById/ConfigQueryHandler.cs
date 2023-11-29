@@ -4,7 +4,7 @@ using AppConfigMicroservice.Features.Config.Services;
 using FluentValidation;
 using MediatR;
 
-namespace AppConfigMicroservice.Features.Config.Query
+namespace AppConfigMicroservice.Features.Config.Query.GetById
 {
     internal sealed class ConfigQueryHandler : IRequestHandler<ConfigQuery, ApiResponse<ConfigEntity>>
     {
