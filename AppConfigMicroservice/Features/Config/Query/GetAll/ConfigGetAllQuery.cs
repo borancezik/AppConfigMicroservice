@@ -4,7 +4,7 @@ using MediatR;
 
 namespace AppConfigMicroservice.Features.Config.Query.GetAll
 {
-    public class ConfigGetAllQuery : IRequest<List<ConfigEntity>>
+    public record ConfigGetAllQuery : IRequest<List<ConfigEntity>>
     {
         public int Page { get; set; }
         public int Size { get; set; }
