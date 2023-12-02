@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace AppConfigMicroservice.Features.Config.Command
+namespace AppConfigMicroservice.Features.Config.Command.AddCommand
 {
     public class ConfigCommandValidator : AbstractValidator<ConfigCommand>
     {

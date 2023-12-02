@@ -2,6 +2,7 @@
 using AppConfigMicroservice.Common.Models.Utils;
 using AppConfigMicroservice.Common.Services.CacheService.Abstract;
 using AppConfigMicroservice.Common.Specifications;
+using AppConfigMicroservice.Features.Application.Data;
 using AppConfigMicroservice.Features.Config.Data;
 using AppConfigMicroservice.Features.Config.Models;
 
@@ -11,10 +12,12 @@ namespace AppConfigMicroservice.Features.Config.Services
     {
         private readonly IConfigRepository _configRepository;
         private readonly ICacheService _cacheService;
-        public ConfigService(IConfigRepository configRepository, ICacheService cacheService)
+        private readonly IApplicationRepository _applicationRepository;
+        public ConfigService(IConfigRepository configRepository, ICacheService cacheService, IApplicationRepository applicationRepository)
         {
             _configRepository = configRepository;
             _cacheService = cacheService;
+            _applicationRepository = applicationRepository;
         }
 
         public async Task<ApiResponse<ConfigEntity>> AddAsync(ConfigEntity config)

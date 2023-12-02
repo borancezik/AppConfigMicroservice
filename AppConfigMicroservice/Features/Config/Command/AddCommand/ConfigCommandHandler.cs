@@ -7,7 +7,7 @@ using ErrorOr;
 using FluentValidation;
 using MediatR;
 
-namespace AppConfigMicroservice.Features.Config.Command
+namespace AppConfigMicroservice.Features.Config.Command.AddCommand
 {
     internal sealed class ConfigCommandHandler : IRequestHandler<ConfigCommand, ApiResponse<ConfigEntity>>
     {

@@ -9,12 +9,10 @@ namespace AppConfigMicroservice.Features.Config.Data
     public class ConfigRepository : RepositoryBase<ConfigEntity,ApplicationContext>, IConfigRepository
     {
         private readonly ApplicationContext _context;
-        private readonly ICacheService _cacheService;
 
-        public ConfigRepository(ApplicationContext context, ICacheService cacheService) : base(context)
+        public ConfigRepository(ApplicationContext context) : base(context)
         {
             _context = context;
-            _cacheService = cacheService;
         }
     }
 }

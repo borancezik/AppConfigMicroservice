@@ -1,4 +1,4 @@
-﻿using AppConfigMicroservice.Features.Config.Command;
+﻿using AppConfigMicroservice.Features.Config.Command.AddCommand;
 using AppConfigMicroservice.Features.Config.Query.GetAll;
 using AppConfigMicroservice.Features.Config.Query.GetById;
 using AppConfigMicroservice.Features.Config.Query.GetProductionType;

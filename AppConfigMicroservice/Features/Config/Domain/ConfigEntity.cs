@@ -11,15 +11,15 @@ namespace AppConfigMicroservice.Features.Config.Models
         public long Id { get; set; }
 
         [Column("application_id")]
-        public int? ApplicationId { get; set; }
+        public int ApplicationId { get; set; }
 
         [Column("env_type")]
-        public int? EnvType { get; set; }
+        public int EnvType { get; set; }
 
         [Column("config_type")]
-        public int? ConfigType { get; set; }
+        public int ConfigType { get; set; }
 
         [Column("config")]
-        public string? Config { get; set; }
+        public string Config { get; set; }
     }
 }

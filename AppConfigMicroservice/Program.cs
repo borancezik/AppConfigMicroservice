@@ -4,7 +4,7 @@ using AppConfigMicroservice.Common.Services.CacheService.Abstract;
 using AppConfigMicroservice.Common.Services.CacheService.Concrete;
 using AppConfigMicroservice.DataAccess;
 using AppConfigMicroservice.Features.Config;
-using AppConfigMicroservice.Features.Config.Command;
+using AppConfigMicroservice.Features.Config.Command.AddCommand;
 using AppConfigMicroservice.Features.Config.Data;
 using AppConfigMicroservice.Features.Config.Query.GetById;
 using AppConfigMicroservice.Features.Config.Services;
