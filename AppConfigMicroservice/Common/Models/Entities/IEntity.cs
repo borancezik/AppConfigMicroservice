@@ -1,5 +1,3 @@
 ﻿namespace AppConfigMicroservice.Common.Models.Entities;
 
-public interface IEntity
-{
-}
+public interface IEntity;
