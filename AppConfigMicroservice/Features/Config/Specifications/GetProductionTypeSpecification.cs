@@ -14,6 +14,6 @@ public class GetProductionTypeSpecification : Specification<ConfigEntity>
     }
     public override Expression<Func<ConfigEntity, bool>> Expression()
     {
-        return p => p.EnvType == Convert.ToInt32(EnvType.PRODUCTION) && p.ApplicationId == _applicationId;
+        return p => p.EnvType == (int)EnvType.PRODUCTION && p.ApplicationId == _applicationId;
     }
 }

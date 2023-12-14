@@ -32,7 +32,7 @@ public class DistributedCacheMethod : ICacheMethod
     {
         var cachedDataString = await _distributedCache.GetStringAsync(cacheKey);
 
-        if (cachedDataString != null)
+        if (cachedDataString is not null)
         {
             return JsonSerializer.Deserialize<T>(cachedDataString);
         }

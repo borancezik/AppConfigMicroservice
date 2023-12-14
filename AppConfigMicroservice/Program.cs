@@ -12,6 +12,7 @@ using AppConfigMicroservice.Features.Config.Services;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.FeatureManagement;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,7 +26,7 @@ builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSet
 builder.Services.AddScoped<IConfigRepository, ConfigRepository>();
 builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
 builder.Services.AddScoped<IConfigService, ConfigService>();
-builder.Services.AddScoped<ICacheService, CacheService>();
+builder.Services.AddScoped<CacheService>();
 builder.Services.AddScoped<ICacheMethod, MemoryCacheMethod>();
 builder.Services.AddScoped<ICacheMethod, DistributedCacheMethod>();
 builder.Services.AddScoped<MemoryCacheMethod>();
@@ -33,6 +34,7 @@ builder.Services.AddScoped<DistributedCacheMethod>();
 builder.Services.AddScoped(typeof(IPipelineBehavior<,>),typeof(ValidationBehavior<,>));
 builder.Services.AddTransient<IValidator<ConfigQuery>, ConfigQueryValidator>();
 builder.Services.AddTransient<IValidator<ConfigCommand>, ConfigCommandValidator>();
+builder.Services.AddFeatureManagement();
 builder.Services.AddStackExchangeRedisCache(options => {
     options.Configuration = "localhost:6379";
     options.InstanceName = "SampleInstance";
