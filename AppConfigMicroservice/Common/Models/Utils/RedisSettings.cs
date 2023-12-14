@@ -1,9 +1,8 @@
-﻿namespace AppConfigMicroservice.Common.Models.Utils
+﻿namespace AppConfigMicroservice.Common.Models.Utils;
+
+public class RedisSettings
 {
-    public class RedisSettings
-    {
-        public string ServiceUrl { get; set; }
-        public string Password { get; set; }
-        public bool EnableInMemoryCache { get; set; }
-    }
+    public string ServiceUrl { get; set; }
+    public string Password { get; set; }
+    public bool EnableInMemoryCache { get; set; }
 }

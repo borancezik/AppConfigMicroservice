@@ -1,16 +1,15 @@
 ﻿using System.Linq.Expressions;
 
-namespace AppConfigMicroservice.Common.Specifications
+namespace AppConfigMicroservice.Common.Specifications;
+
+public abstract class Specification<T>
 {
-    public abstract class Specification<T>
+    public abstract Expression<Func<T, bool>> Expression();
+
+    public bool IsSatisfiedBy(T entity)
     {
-        public abstract Expression<Func<T, bool>> Expression();
+        Func<T, bool> predicate = Expression().Compile();
 
-        public bool IsSatisfiedBy(T entity)
-        {
-            Func<T, bool> predicate = Expression().Compile();
-
-            return predicate(entity);
-        }
+        return predicate(entity);
     }
 }

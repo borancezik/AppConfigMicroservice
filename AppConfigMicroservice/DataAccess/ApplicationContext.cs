@@ -2,16 +2,15 @@
 using AppConfigMicroservice.Features.Config.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace AppConfigMicroservice.DataAccess
+namespace AppConfigMicroservice.DataAccess;
+
+public class ApplicationContext : DbContext
 {
-    public class ApplicationContext : DbContext
+    public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
     {
-        public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
-        {
 
-        }
-
-        public DbSet<ConfigEntity> configs { get; set; }
-        public DbSet<ApplicationEntity> applications { get; set; }
     }
+
+    public DbSet<ConfigEntity> configs { get; set; }
+    public DbSet<ApplicationEntity> applications { get; set; }
 }

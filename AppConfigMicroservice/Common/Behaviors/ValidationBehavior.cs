@@ -2,42 +2,40 @@
 using ErrorOr;
 using FluentValidation;
 using MediatR;
-using Microsoft.IdentityModel.Tokens;
 
-namespace AppConfigMicroservice.Common.Behaviors
+namespace AppConfigMicroservice.Common.Behaviors;
+
+public class ValidationBehavior<TRequest, TResponse> : 
+    IPipelineBehavior<TRequest, ApiResponse<TResponse>> 
+    where TRequest : IRequest<ApiResponse<TResponse>> 
+    where TResponse : class
 {
-    public class ValidationBehavior<TRequest, TResponse> : 
-        IPipelineBehavior<TRequest, ApiResponse<TResponse>> 
-        where TRequest : IRequest<ApiResponse<TResponse>> 
-        where TResponse : class
+    private readonly IValidator<TRequest>? _validator;
+
+    public ValidationBehavior(IValidator<TRequest>? validator = null)
     {
-        private readonly IValidator<TRequest>? _validator;
+        _validator= validator;
+    }
 
-        public ValidationBehavior(IValidator<TRequest>? validator = null)
+    public async Task<ApiResponse<TResponse>> Handle(TRequest request, RequestHandlerDelegate<ApiResponse<TResponse>> next, CancellationToken cancellationToken)
+    {
+        if (_validator is null)
         {
-            _validator= validator;
+            return await next();
         }
 
-        public async Task<ApiResponse<TResponse>> Handle(TRequest request, RequestHandlerDelegate<ApiResponse<TResponse>> next, CancellationToken cancellationToken)
+        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
+
+        if (validationResult.IsValid)
         {
-            if (_validator is null)
-            {
-                return await next();
-            }
-
-            var validationResult = await _validator.ValidateAsync(request, cancellationToken);
-
-            if (validationResult.IsValid)
-            {
-                return await next();
-            }
-
-            var errors = validationResult.Errors
-                .ConvertAll(validationFailure => Error.Validation(
-                    validationFailure.PropertyName,
-                    validationFailure.ErrorMessage));
-
-            return ApiResponse<TResponse>.FailureResult(errors.First().Description);
+            return await next();
         }
+
+        var errors = validationResult.Errors
+            .ConvertAll(validationFailure => Error.Validation(
+                validationFailure.PropertyName,
+                validationFailure.ErrorMessage));
+
+        return ApiResponse<TResponse>.FailureResult(errors.First().Description);
     }
 }

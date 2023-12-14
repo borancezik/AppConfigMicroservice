@@ -1,14 +1,13 @@
 ﻿using FluentValidation;
 
-namespace AppConfigMicroservice.Features.Config.Command.AddCommand
+namespace AppConfigMicroservice.Features.Config.Command.AddCommand;
+
+public class ConfigCommandValidator : AbstractValidator<ConfigCommand>
 {
-    public class ConfigCommandValidator : AbstractValidator<ConfigCommand>
+    public ConfigCommandValidator()
     {
-        public ConfigCommandValidator()
-        {
-            RuleFor(x => x.ConfigType)
-            .LessThanOrEqualTo(4)
-            .WithMessage("ConfigType alanı 4 değerinden büyük olamaz.");
-        }
+        RuleFor(x => x.ConfigType)
+        .LessThanOrEqualTo(4)
+        .WithMessage("ConfigType alanı 4 değerinden büyük olamaz.");
     }
 }

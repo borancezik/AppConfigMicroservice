@@ -2,12 +2,11 @@
 using AppConfigMicroservice.DataAccess;
 using AppConfigMicroservice.Features.Application.Domain;
 
-namespace AppConfigMicroservice.Features.Application.Data
+namespace AppConfigMicroservice.Features.Application.Data;
+
+public class ApplicationRepository : RepositoryBase<ApplicationEntity, ApplicationContext>, IApplicationRepository
 {
-    public class ApplicationRepository : RepositoryBase<ApplicationEntity, ApplicationContext>, IApplicationRepository
+    public ApplicationRepository(ApplicationContext context) : base(context)
     {
-        public ApplicationRepository(ApplicationContext context) : base(context)
-        {
-        }
     }
 }

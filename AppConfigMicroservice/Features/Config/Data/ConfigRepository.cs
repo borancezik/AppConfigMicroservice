@@ -4,15 +4,14 @@ using AppConfigMicroservice.DataAccess;
 using AppConfigMicroservice.Common.Models.Entities;
 using AppConfigMicroservice.Features.Config.Models;
 
-namespace AppConfigMicroservice.Features.Config.Data
-{
-    public class ConfigRepository : RepositoryBase<ConfigEntity,ApplicationContext>, IConfigRepository
-    {
-        private readonly ApplicationContext _context;
+namespace AppConfigMicroservice.Features.Config.Data;
 
-        public ConfigRepository(ApplicationContext context) : base(context)
-        {
-            _context = context;
-        }
+public class ConfigRepository : RepositoryBase<ConfigEntity,ApplicationContext>, IConfigRepository
+{
+    private readonly ApplicationContext _context;
+
+    public ConfigRepository(ApplicationContext context) : base(context)
+    {
+        _context = context;
     }
 }

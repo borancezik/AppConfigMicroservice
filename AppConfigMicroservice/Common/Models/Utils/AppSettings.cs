@@ -1,7 +1,6 @@
-﻿namespace AppConfigMicroservice.Common.Models.Utils
+﻿namespace AppConfigMicroservice.Common.Models.Utils;
+
+public class AppSettings
 {
-    public class AppSettings
-    {
-        public RedisSettings RedisSettings { get; set; }
-    }
+    public RedisSettings RedisSettings { get; set; }
 }

@@ -2,12 +2,11 @@
 using AppConfigMicroservice.Features.Config.Models;
 using MediatR;
 
-namespace AppConfigMicroservice.Features.Config.Query.GetAll
+namespace AppConfigMicroservice.Features.Config.Query.GetAll;
+
+public record ConfigGetAllQuery : IRequest<List<ConfigEntity>>
 {
-    public record ConfigGetAllQuery : IRequest<List<ConfigEntity>>
-    {
-        public int Page { get; set; }
-        public int Size { get; set; }
-        public long Id { get; set; }
-    }
+    public int Page { get; set; }
+    public int Size { get; set; }
+    public long Id { get; set; }
 }

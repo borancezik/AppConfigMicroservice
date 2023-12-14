@@ -1,9 +1,8 @@
-﻿namespace AppConfigMicroservice.Common.Services.CacheService.Abstract
+﻿namespace AppConfigMicroservice.Common.Services.CacheService.Abstract;
+
+public interface ICacheService
 {
-    public interface ICacheService
-    {
-        Task AddAsync<T>(string cacheKey, T data, int cachingTime = 20);
-        Task DeleteAsync(string cacheKey);
-        Task<T> GetAsync<T>(string cacheKey);
-    }
+    Task AddAsync<T>(string cacheKey, T data, int cachingTime = 20);
+    Task DeleteAsync(string cacheKey);
+    Task<T> GetAsync<T>(string cacheKey);
 }
