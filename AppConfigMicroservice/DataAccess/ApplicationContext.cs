@@ -1,4 +1,5 @@
-﻿using AppConfigMicroservice.Features.Config.Models;
+﻿using AppConfigMicroservice.Features.Application.Domain;
+using AppConfigMicroservice.Features.Config.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace AppConfigMicroservice.DataAccess
@@ -11,5 +12,6 @@ namespace AppConfigMicroservice.DataAccess
         }
 
         public DbSet<ConfigEntity> configs { get; set; }
+        public DbSet<ApplicationEntity> applications { get; set; }
     }
 }

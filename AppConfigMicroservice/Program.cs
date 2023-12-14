@@ -3,6 +3,7 @@ using AppConfigMicroservice.Common.Models.Utils;
 using AppConfigMicroservice.Common.Services.CacheService.Abstract;
 using AppConfigMicroservice.Common.Services.CacheService.Concrete;
 using AppConfigMicroservice.DataAccess;
+using AppConfigMicroservice.Features.Application.Data;
 using AppConfigMicroservice.Features.Config;
 using AppConfigMicroservice.Features.Config.Command.AddCommand;
 using AppConfigMicroservice.Features.Config.Data;
@@ -22,6 +23,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 builder.Services.AddScoped<IConfigRepository, ConfigRepository>();
+builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
 builder.Services.AddScoped<IConfigService, ConfigService>();
 builder.Services.AddScoped<ICacheService, CacheService>();
 builder.Services.AddScoped<ICacheMethod, MemoryCacheMethod>();
@@ -41,6 +43,7 @@ builder.Services.AddDbContext<ApplicationContext>(options =>
 });
 builder.Services.AddMediatR(config => config.RegisterServicesFromAssembly(typeof(Program).Assembly));
 builder.Services.AddMemoryCache();
+
 
 var app = builder.Build();
 
