@@ -1,3 +1,4 @@
+using AppConfigMicroservice.Common;
 using AppConfigMicroservice.Common.Behaviors;
 using AppConfigMicroservice.Common.Models.Utils;
 using AppConfigMicroservice.Common.Services.CacheService.Abstract;
@@ -13,6 +14,7 @@ using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.FeatureManagement;
+using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +25,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
 builder.Services.AddScoped<IConfigRepository, ConfigRepository>();
 builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
 builder.Services.AddScoped<IConfigService, ConfigService>();
@@ -35,6 +39,10 @@ builder.Services.AddScoped(typeof(IPipelineBehavior<,>),typeof(ValidationBehavio
 builder.Services.AddTransient<IValidator<ConfigQuery>, ConfigQueryValidator>();
 builder.Services.AddTransient<IValidator<ConfigCommand>, ConfigCommandValidator>();
 builder.Services.AddFeatureManagement();
+builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
+{
+    return ConnectionMultiplexer.Connect("localhost:6379");
+});
 builder.Services.AddStackExchangeRedisCache(options => {
     options.Configuration = "localhost:6379";
     options.InstanceName = "SampleInstance";
@@ -59,6 +67,8 @@ if (app.Environment.IsDevelopment())
 ConfigsController.MapEndpoints(app);
 
 app.UseHttpsRedirection();
+
+app.UseExceptionHandler();
 
 app.UseAuthorization();
 

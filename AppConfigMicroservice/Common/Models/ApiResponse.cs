@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata;
-
-namespace AppConfigMicroservice.Common.Models;
+﻿namespace AppConfigMicroservice.Common.Models;
 
 public class ApiResponse<T>
 {

@@ -24,9 +24,9 @@ public class CacheService
         #endregion
     }
 
-    public async Task AddAsync<T>(string cacheKey, T data, int cachingTime = 20)
+    public async Task AddAsync<T>(string cacheKey, string hashField, T data, int cachingTime = 20)
     {
-        await _cache.AddAsync(cacheKey, data, cachingTime);
+        await _cache.AddAsync(cacheKey, hashField, data, cachingTime);
     }
 
     public async Task DeleteAsync(string cacheKey)
@@ -34,9 +34,9 @@ public class CacheService
         await _cache.DeleteAsync(cacheKey);
     }
 
-    public async Task<T> GetAsync<T>(string cacheKey)
+    public async Task<T> GetAsync<T>(string cacheKey, string hashField)
     {
-        var result = await _cache.GetAsync<T>(cacheKey);
+        var result = await _cache.GetAsync<T>(cacheKey,hashField);
         return result;
     }
 }

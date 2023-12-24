@@ -53,8 +53,9 @@ public class ConfigService : IConfigService
 
     public async Task<ApiResponse<ConfigEntity>> GetByIdAsync(long id)
     {
-        string cacheKey = $"{nameof(ConfigEntity)}-{id}";
-        var configCache = await _cacheService.GetAsync<ConfigEntity>(cacheKey);
+        string cacheKey = $"{id}";
+        string hashField = $"{nameof(ConfigEntity)}";
+        var configCache = await _cacheService.GetAsync<ConfigEntity>(cacheKey, hashField);
 
         if (configCache is not null)
             return ApiResponse<ConfigEntity>.SuccessResult(configCache);
@@ -62,7 +63,7 @@ public class ConfigService : IConfigService
         var configEntity = await _configRepository.GetByIdAsync(id);
         if (configEntity is not null)
         {
-            await _cacheService.AddAsync(cacheKey, configEntity);
+            await _cacheService.AddAsync(cacheKey,hashField, configEntity);
             return ApiResponse<ConfigEntity>.SuccessResult(configEntity);
         }
 

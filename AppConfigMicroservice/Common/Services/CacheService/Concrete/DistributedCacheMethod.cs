@@ -1,5 +1,6 @@
 ﻿using AppConfigMicroservice.Common.Services.CacheService.Abstract;
 using Microsoft.Extensions.Caching.Distributed;
+using StackExchange.Redis;
 using System.Text.Json;
 
 namespace AppConfigMicroservice.Common.Services.CacheService.Concrete;
@@ -7,32 +8,33 @@ namespace AppConfigMicroservice.Common.Services.CacheService.Concrete;
 public class DistributedCacheMethod : ICacheMethod
 {
     private readonly IDistributedCache _distributedCache;
+    private readonly IDatabase _redisDatabase;
 
-    public DistributedCacheMethod(IDistributedCache distributedCache)
+    public DistributedCacheMethod(IDistributedCache distributedCache, IConnectionMultiplexer redisConnection)
     {
         _distributedCache = distributedCache;
+        _redisDatabase = redisConnection.GetDatabase();
     }
 
-    public async Task AddAsync<T>(string cacheKey, T data, int cachingTime = 20)
+    public async Task AddAsync<T>(string cacheKey, string hashField, T data, int cachingTime = 20)
     {
-        var cacheEntryOptions = new DistributedCacheEntryOptions()
-        {
-            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(cachingTime)
-        };
+        await _redisDatabase.HashSetAsync(cacheKey, hashField, JsonSerializer.Serialize(data));
 
-        await _distributedCache.SetStringAsync(cacheKey, JsonSerializer.Serialize(data), cacheEntryOptions);
+        await _redisDatabase.KeyExpireAsync(cacheKey, TimeSpan.FromMinutes(cachingTime));
     }
 
     public async Task DeleteAsync(string cacheKey)
     {
-        await _distributedCache.RemoveAsync(cacheKey);
+        await _redisDatabase.KeyDeleteAsync(cacheKey);
     }
 
-    public async Task<T> GetAsync<T>(string cacheKey)
+    public async Task<T> GetAsync<T>(string cacheKey, string hashField)
     {
-        var cachedDataString = await _distributedCache.GetStringAsync(cacheKey);
+        var hashSetKey = cacheKey;
 
-        if (cachedDataString is not null)
+        var cachedDataString = await _redisDatabase.HashGetAsync(hashSetKey, hashField);
+
+        if (!cachedDataString.IsNull)
         {
             return JsonSerializer.Deserialize<T>(cachedDataString);
         }

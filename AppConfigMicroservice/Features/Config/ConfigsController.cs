@@ -3,8 +3,6 @@ using AppConfigMicroservice.Features.Config.Query.GetAll;
 using AppConfigMicroservice.Features.Config.Query.GetById;
 using AppConfigMicroservice.Features.Config.Query.GetPreProductionType;
 using AppConfigMicroservice.Features.Config.Query.GetProductionType;
-using Azure;
-using ErrorOr;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,7 +17,7 @@ public static class ConfigsController
             return  await sender.Send(command);
         });
 
-        app.MapGet("api/configs/{id}", async ([FromQuery] int id, ISender sender) =>
+        app.MapGet("api/configs/{id}", async (int id, ISender sender) =>
         {
             ConfigQuery query = new ConfigQuery() { Id = id };
             return await sender.Send(query);
@@ -31,13 +29,13 @@ public static class ConfigsController
             return await sender.Send(query);
         });
 
-        app.MapGet("api/configs/production/{id}", async ([FromQuery] int applicationId, ISender sender) =>
+        app.MapGet("api/configs/production/{applicationId}", async (int applicationId, ISender sender) =>
         {
             GetProductionTypeQuery query = new GetProductionTypeQuery() { ApplicationId = applicationId };
             return await sender.Send(query);
         });
 
-        app.MapGet("api/configs/preproduction/{id}", async ([FromQuery] int applicationId, ISender sender) =>
+        app.MapGet("api/configs/preproduction/{applicationId}", async (int applicationId, ISender sender) =>
         {
             GetPreProductionTypeQuery query = new GetPreProductionTypeQuery() { ApplicationId = applicationId };
             return await sender.Send(query);
