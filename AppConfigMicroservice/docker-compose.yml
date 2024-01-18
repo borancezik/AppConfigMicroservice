@@ -1,0 +1,27 @@
+version: '4.26.1'
+
+services:
+  applicationconfigs:
+    container_name: aliz
+    image: borancezik/applicationconfigs:1.0
+    build: .
+    ports:
+      - "8081:80"
+    environment:
+      ConnectionStrings__DefaultConnection: "Host=db;Database=application_configs;Username=postgres;Password=14121998"
+    depends_on:
+      - db
+  db:
+    container_name: db
+    image: postgres:16
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata: {}
