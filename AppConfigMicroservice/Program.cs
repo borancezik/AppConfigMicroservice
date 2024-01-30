@@ -39,6 +39,7 @@ builder.Services.AddScoped(typeof(IPipelineBehavior<,>),typeof(ValidationBehavio
 builder.Services.AddTransient<IValidator<ConfigQuery>, ConfigQueryValidator>();
 builder.Services.AddTransient<IValidator<ConfigCommand>, ConfigCommandValidator>();
 builder.Services.AddFeatureManagement();
+builder.Services.AddSignalR();
 builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
 {
     return ConnectionMultiplexer.Connect("localhost:6379");
@@ -65,6 +66,8 @@ if (app.Environment.IsDevelopment())
 }
 
 ConfigsController.MapEndpoints(app);
+
+app.MapHub<SocketServerService>("/config-master-hub");
 
 app.UseHttpsRedirection();
 

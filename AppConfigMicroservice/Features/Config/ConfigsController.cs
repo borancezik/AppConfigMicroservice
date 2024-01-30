@@ -1,4 +1,5 @@
 ﻿using AppConfigMicroservice.Features.Config.Command.AddCommand;
+using AppConfigMicroservice.Features.Config.Command.UpdateCommand;
 using AppConfigMicroservice.Features.Config.Query.GetAll;
 using AppConfigMicroservice.Features.Config.Query.GetById;
 using AppConfigMicroservice.Features.Config.Query.GetPreProductionType;
@@ -12,9 +13,14 @@ public static class ConfigsController
 {
     public static void MapEndpoints(this IEndpointRouteBuilder app)
     {
-        app.MapPost("api/configs", async ([FromBody] ConfigCommand command, ISender sender) =>
+        app.MapPost("api/configs/add", async ([FromBody] ConfigCommand command, ISender sender) =>
         {
             return  await sender.Send(command);
+        });
+
+        app.MapPost("api/configs/update", async ([FromBody] UpdateConfigCommand command, ISender sender) =>
+        {
+            return await sender.Send(command);
         });
 
         app.MapGet("api/configs/{id}", async (int id, ISender sender) =>
